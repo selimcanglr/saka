@@ -14,7 +14,7 @@ type Book struct {
 
 type BookRating struct {
 	gorm.Model
-	BookID uint
+	BookID uint `gorm:"uniqueIndex"`
 
 	Rating uint8
 	Review string

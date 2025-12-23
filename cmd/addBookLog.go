@@ -14,10 +14,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// addBookLogCmd represents the addBookLog command
+// TODO: Add sub-command "last" to add a log to the latest book, skipping the book selection step
+// TODO: Allow using flags to rate: title, rating, entry?
+
 var addBookLogCmd = &cobra.Command{
 	Use:     "addBookLog",
-	Aliases: []string{"log", "al"}, // Added handy aliases
+	Aliases: []string{"log"}, // Added handy aliases
 	Short:   "Add a reading log/entry for a book",
 	Long:    `Record your progress or thoughts while reading a book. Tracks page number and comments.`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -71,8 +73,8 @@ var addBookLogCmd = &cobra.Command{
 				// Text area for the log entry
 				huh.NewText().
 					Title("Log Entry").
-					Placeholder("What happened in this chapter? Any thoughts?").
-					CharLimit(500).
+					Placeholder("Any thoughts?").
+					CharLimit(3000).
 					Value(&entryText),
 			),
 		)

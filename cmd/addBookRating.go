@@ -14,11 +14,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// addBookRatingCmd represents the addBookRating command
 var addBookRatingCmd = &cobra.Command{
 	Use:   "addBookRating",
-	Aliases: []string{"rate", "ar", "abr"},
-	Short: "Add a rating to an existing book",
+	Aliases: []string{"rate"},
+	Short: "Add a rating to an existing book.",
+	Long: "You can only add one rating per book.",
 	Run: func(cmd *cobra.Command, args []string) {
 		// 1. Fetch data
 		var books []database.Book
@@ -82,7 +82,8 @@ var addBookRatingCmd = &cobra.Command{
 			BookID: selectedBookID,
 			Rating: uint8(ratingInt),
 		}
-
+		
+		// TODO: Handle attempt to add multiple ratings for a book.
 		insertRatingResult := database.DB.Create(&newRating)
 		if insertRatingResult.Error != nil {
 			log.Fatal("Failed to save rating:", insertRatingResult.Error)

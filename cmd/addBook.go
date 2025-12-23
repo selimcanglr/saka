@@ -6,45 +6,22 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"os"
 
-	"github.com/charmbracelet/huh"
 	"github.com/selimcanglr/book-cli/internal/database"
 	"github.com/spf13/cobra"
 )
 
+var title string
+var author string
+
+// TODO: Display huh form if no flag is provided
+
 var addBookCmd = &cobra.Command{
 	Use:   "addBook",
-	Aliases: []string{"add", "ab"},
+	Aliases: []string{"add"},
 	Short: "Add a new book",
 	Long: `Adds a new book to your library.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		var title string
-		var author string
-
-		form := huh.NewForm(
-			huh.NewGroup(
-				huh.NewInput().
-					Title("Title:").
-					Description("Book title").
-					Placeholder("Software Engineering at Google").
-					Value(&title),
-				huh.NewInput().
-					Title("Author:").
-					Description("Author of the book").
-					Placeholder("Titus Winters").
-					Value(&author),
-			),
-		)
-
-		err := form.Run()
-		if err != nil {
-			if err == huh.ErrUserAborted {
-				os.Exit(0)
-			}
-			log.Fatal(err)
-		}
-
 		newBook := database.Book{
 			Title: title,
 			Author: author,
@@ -57,9 +34,14 @@ var addBookCmd = &cobra.Command{
 
 		fmt.Printf("Added book successfully.")
 	},
-	Args: cobra.MatchAll(cobra.OnlyValidArgs),
 }
 
 func init() {
 	rootCmd.AddCommand(addBookCmd)
+
+	addBookCmd.Flags().StringVarP(&title, "title", "t", "", "Title of the book")
+	addBookCmd.MarkFlagRequired("title")
+
+	addBookCmd.Flags().StringVarP(&author, "author", "a", "", "Author of the book")
+	addBookCmd.MarkFlagRequired("author")
 }
